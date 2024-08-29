@@ -24,12 +24,12 @@ public class EmployerController {
     private final EmployerFacade employerFacade;
 
     @GetMapping("{id}")
-    public EmployerResponse getCustomerById(@PathVariable Long id) {
+    public EmployerResponse getEmployerById(@PathVariable Long id) {
         return employerFacade.convertToResponse(employerService.getEmployerById(id));
     }
 
     @GetMapping
-    public List<EmployerResponse> getAllCustomers() {
+    public List<EmployerResponse> getAllEmployers() {
         List<Employer> employers = employerService.getAllEmployers();
         return employers.stream()
                 .map(employerFacade::convertToResponse)
