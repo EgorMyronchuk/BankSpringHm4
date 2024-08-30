@@ -128,7 +128,6 @@ public class CustomerControllerTest {
         Pageable pageable = PageRequest.of(1, 2);
         Page<Customer> customerPage = new PageImpl<>(customerList, pageable, customerList.size());
 
-        // Возвращаем Page<Customer> из сервиса
         when(customerService.getAllCustomers(1, 2)).thenReturn(customerPage);
 
         mockMvc.perform(get("/customers")
@@ -152,6 +151,21 @@ public class CustomerControllerTest {
 
     @Test
     public void saveCustomer() throws Exception {
+        CustomerRequest customerRequest = new CustomerRequest();
+        customerRequest.setName("Alex");
+        customerRequest.setAge(30);
+        customerRequest.setEmail("alex@gmail.com");
+        customerRequest.setPassword("alex");
+        customerRequest.setPhone("38034321207");
+
+        String customerRequestJson = objectMapper.writeValueAsString(customerRequest);
+
+        mockMvc.perform(post("/customers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(customerRequestJson))
+                .andExpect(status().isOk());
+
+        verify(customerService, times(1)).saveCustomer(any(Customer.class));
     }
 
     @Test
