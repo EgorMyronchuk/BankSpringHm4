@@ -24,6 +24,4 @@ public class AccountRequest {
     @NotEmpty
     private CustomCurrency currency;
 
-    @PositiveOrZero
-    private Double balance;
 }
