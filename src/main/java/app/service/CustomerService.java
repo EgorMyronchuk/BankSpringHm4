@@ -38,7 +38,6 @@ public class CustomerService {
         if (CustomerList.isEmpty()) {
             throw new EntityNotFoundException("No Customers found");
         }
-        System.out.println(customerRepository.findAll());
         return CustomerList;
     }
 
@@ -73,5 +72,6 @@ public class CustomerService {
         if (!customerOpt.get().getAccounts().remove(account)) {
             throw new EntityNotFoundException("Not found this Account : " + account);
         }
+        customerRepository.save(customerOpt.get());
     }
 }
