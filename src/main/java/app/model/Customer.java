@@ -23,6 +23,8 @@ public class Customer extends AbstractEntity {
     private String password;
     @Column
     private String phone;
+    @Column
+    private String role;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
