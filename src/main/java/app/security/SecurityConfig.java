@@ -36,8 +36,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return  http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers("test/welcome").permitAll() //вход без авторизации
-                        .requestMatchers("/").authenticated()) //с авторизацией и аутентификацией
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/").authenticated())
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .build();
     }

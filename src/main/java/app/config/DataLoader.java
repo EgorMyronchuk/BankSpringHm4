@@ -3,9 +3,8 @@ package app.config;
 import app.model.Account;
 import app.model.Customer;
 import app.model.Employer;
-import app.repository.AccountRepository;
-import app.repository.CustomerRepository;
-import app.repository.EmployerRepository;
+import app.service.CustomerService;
+import app.service.EmployerService;
 import app.utils.CardNumberUtils;
 import app.utils.CustomCurrency;
 import lombok.AllArgsConstructor;
@@ -18,9 +17,8 @@ import org.springframework.stereotype.Component;
 @Profile("local")
 public class DataLoader implements CommandLineRunner {
 
-    private final CustomerRepository customerRepository;
-    private final AccountRepository accountRepository;
-    private final EmployerRepository employerRepository;
+    private final CustomerService customerService;
+    private final EmployerService employerService;
     private final CardNumberUtils cardNumberUtils;
 
     @Override
@@ -35,8 +33,8 @@ public class DataLoader implements CommandLineRunner {
         healthInc.setAddress("5678 Health Avenue");
 
         // Сохраняем работодателей
-        employerRepository.save(techCorp);
-        employerRepository.save(healthInc);
+        employerService.saveEmployer(techCorp);
+        employerService.saveEmployer(healthInc);
 
         // Создаем клиентов
         Customer johnDoe = new Customer();
@@ -58,16 +56,16 @@ public class DataLoader implements CommandLineRunner {
         janeSmith.getEmployers().add(healthInc);
 
         // Сохраняем клиентов
-        customerRepository.save(johnDoe);
-        customerRepository.save(janeSmith);
+        customerService.saveCustomer(johnDoe);
+        customerService.saveCustomer(janeSmith);
 
         // Создаем счета для клиентов
         Account johnAccount = new Account(cardNumberUtils.generateCardNumber(), CustomCurrency.USD, johnDoe);
         johnAccount.setBalance(1000.0);
-        accountRepository.save(johnAccount);
+        customerService.createAccountForCustomer(1L,CustomCurrency.USD);
 
         Account janeAccount = new Account(cardNumberUtils.generateCardNumber(), CustomCurrency.EURO, janeSmith);
         janeAccount.setBalance(2000.0);
-        accountRepository.save(janeAccount);
+        customerService.createAccountForCustomer(2L,CustomCurrency.USD);
     }
 }

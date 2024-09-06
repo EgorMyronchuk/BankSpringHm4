@@ -11,6 +11,7 @@ import app.model.Account;
 import app.model.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import app.utils.CustomCurrency;
 
@@ -24,6 +25,8 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
     private final CardNumberUtils cardNumberUtils;
+    private final PasswordEncoder passwordEncoder;
+
     public Customer getCustomerById(Long id) {
         Optional<Customer> customerOpt = customerRepository.findById(id);
         if (customerOpt.isEmpty()) {
@@ -42,6 +45,12 @@ public class CustomerService {
     }
 
     public void saveCustomer(Customer customer) {
+        String encodedPassword = passwordEncoder.encode(customer.getPassword());
+        System.out.println("I was here");
+        if (customer.getRole() == null) {
+            customer.setRole("ROLE_USER");
+        }
+        customer.setPassword(encodedPassword);
         customerRepository.save(customer);
     }
 
